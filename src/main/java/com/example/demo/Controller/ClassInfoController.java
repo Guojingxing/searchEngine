@@ -27,7 +27,7 @@ public class ClassInfoController {
 
     // 添加班级信息页面
     @GetMapping("add")
-    public String addStudentInfo(Model model){
+    public String addClassInfo(Model model){
         List<ClassInfo> classes = classInfoService.findAllClassInfo();
         model.addAttribute("cls", classes);
         return "addclassinfo"; // addclassinfo.html
@@ -35,7 +35,7 @@ public class ClassInfoController {
 
     // 添加班级信息提交
     @PostMapping("add")
-    public String addStudentInfo(ClassInfo classInfo){
+    public String addClassInfo(ClassInfo classInfo){
         // 保存到数据库里
         classInfoService.addClassInfo(classInfo);
         return "redirect:/cls/list";
@@ -43,7 +43,7 @@ public class ClassInfoController {
 
     // 修改班级信息页面
     @GetMapping("update/{id}")
-    public String updateStudent(@PathVariable("id") Integer clsid, Model model){
+    public String updateClass(@PathVariable("id") Integer clsid, Model model){
         ClassInfo classInfo = classInfoService.findClassByID(clsid);
         model.addAttribute("cls", classInfo);
         return "updateclassinfo";
@@ -51,7 +51,7 @@ public class ClassInfoController {
 
     // 修改班级信息提交
     @PostMapping("update")
-    public String updateStudent(ClassInfo classInfo){
+    public String updateClass(ClassInfo classInfo){
         // 保存在数据库里
         classInfoService.updateClassByID(classInfo);
         return "redirect:/cls/list";
@@ -59,7 +59,7 @@ public class ClassInfoController {
 
     // 删除学生信息
     @GetMapping("list/delete/{id}")
-    public String deleteStudent(@PathVariable("id") Integer clsid, Model model){
+    public String deleteClass(@PathVariable("id") Integer clsid, Model model){
         classInfoService.deleteClassByID(clsid);
         List<ClassInfo> clsLists = classInfoService.findAllClassInfo();
         model.addAttribute("cls",clsLists);
