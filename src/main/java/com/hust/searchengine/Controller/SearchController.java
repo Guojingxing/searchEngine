@@ -29,74 +29,117 @@ public class SearchController {
     @RequestMapping("main")
     public String MainPage(HttpSession session){
         User user = (User)session.getAttribute("user");
-        return "main";
+        if(user!=null)
+            return "main";
+        else
+            return "redirect:/search/login";
     }
 
     @RequestMapping("advancedsearch")
     public String AdvancedSearchPage(HttpSession session){
         User user = (User)session.getAttribute("user");
-        return "advancedsearch";
+        if(user!=null)
+            return "advancedsearch";
+        else
+            return "redirect:/search/login";
     }
 
     @RequestMapping("bookmark")
     public String BookmarkPage(HttpSession session){
         User user = (User)session.getAttribute("user");
-        return "bookmark";
+        if(user!=null)
+            return "bookmark";
+        else
+            return "redirect:/search/login";
     }
 
+    //登出
     @RequestMapping("logout")
     public String LogoutPage(HttpSession session){
         User user = (User)session.getAttribute("user");
-        return "logout";
+        if(user!=null){
+            session.removeAttribute("user");
+        }
+        return "redirect:/search/login";
     }
 
+    //我的
     @RequestMapping("mine")
     public String MinePage(HttpSession session){
         User user = (User)session.getAttribute("user");
-        return "mine";
+        if(user!=null)
+            return "mine";
+        else
+            return "redirect:/search/login";
     }
 
+    //个人主页
     @RequestMapping("profile")
     public String ProfilePage(HttpSession session){
         User user = (User)session.getAttribute("user");
-        return "profile";
+        if(user!=null)
+            return "profile";
+        else
+            return "redirect:/search/login";
     }
 
+    //搜索
     @RequestMapping("search")
     public String SearchPage(HttpSession session){
         User user = (User)session.getAttribute("user");
-        return "search";
+        if(user!=null)
+            return "search";
+        else
+            return "redirect:/search/login";
     }
 
+    //设置
     @RequestMapping("settings")
     public String SettingsPage(HttpSession session){
         User user = (User)session.getAttribute("user");
-        return "settings";
+        if(user!=null)
+            return "settings";
+        else
+            return "redirect:/search/login";
     }
 
+    //订阅
     @RequestMapping("subscription")
     public String SubscriptionPage(HttpSession session){
         User user = (User)session.getAttribute("user");
-        return "subscription";
+        if(user!=null)
+            return "subscription";
+        else
+            return "redirect:/search/login";
     }
 
+    //热搜
     @RequestMapping("trends")
     public String TrendsPage(HttpSession session){
         User user = (User)session.getAttribute("user");
-        return "trends";
+        if(user!=null)
+            return "trends";
+        else
+            return "redirect:/search/login";
     }
 
+    //登录界面
     @RequestMapping("login")
-    public String loginPage(){
+    public String loginPage(HttpSession session){
+        User user = (User)session.getAttribute("user");
+
+        if(user!=null)
+            return "redirect:/search/main";
         return "login";
     }
 
+    //登录界面提交信息
     @PostMapping("login")
     public String loginInfo(@RequestParam("username") String uName,
                             @RequestParam("password") String password,
                             HttpSession session){
         User user = searchService.UserLogin(uName, password);
-
+        session.setMaxInactiveInterval(3600); //括号内数字单位是秒，表示登录的持续时间
         if(user!=null){
             session.setAttribute("user", user );
             return "redirect:/search/main";
