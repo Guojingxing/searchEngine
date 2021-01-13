@@ -13,7 +13,6 @@ public interface SearchMapper {
     User UserLogin(String username, String password);
 
 
-
     @Select("select stu.*, cls.clsName from classinfo cls join student_info stu on cls.clsid=stu.clsid")
     List<Student> findAllStudent();
 

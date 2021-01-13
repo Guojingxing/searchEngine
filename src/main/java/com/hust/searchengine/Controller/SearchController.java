@@ -27,52 +27,62 @@ public class SearchController {
     private ClassInfoService classInfoService;
 
     @RequestMapping("main")
-    public String MainPage(){
+    public String MainPage(HttpSession session){
+        User user = (User)session.getAttribute("user");
         return "main";
     }
 
     @RequestMapping("advancedsearch")
-    public String AdvancedSearchPage(){
+    public String AdvancedSearchPage(HttpSession session){
+        User user = (User)session.getAttribute("user");
         return "advancedsearch";
     }
 
     @RequestMapping("bookmark")
-    public String BookmarkPage(){
+    public String BookmarkPage(HttpSession session){
+        User user = (User)session.getAttribute("user");
         return "bookmark";
     }
 
     @RequestMapping("logout")
-    public String LogoutPage(){
+    public String LogoutPage(HttpSession session){
+        User user = (User)session.getAttribute("user");
         return "logout";
     }
 
     @RequestMapping("mine")
-    public String MinePage(){
+    public String MinePage(HttpSession session){
+        User user = (User)session.getAttribute("user");
         return "mine";
     }
 
     @RequestMapping("profile")
-    public String ProfilePage(){
+    public String ProfilePage(HttpSession session){
+        User user = (User)session.getAttribute("user");
         return "profile";
     }
 
     @RequestMapping("search")
-    public String SearchPage(){
+    public String SearchPage(HttpSession session){
+        User user = (User)session.getAttribute("user");
         return "search";
     }
 
     @RequestMapping("settings")
-    public String SettingsPage(){
+    public String SettingsPage(HttpSession session){
+        User user = (User)session.getAttribute("user");
         return "settings";
     }
 
     @RequestMapping("subscription")
-    public String SubscriptionPage(){
+    public String SubscriptionPage(HttpSession session){
+        User user = (User)session.getAttribute("user");
         return "subscription";
     }
 
     @RequestMapping("trends")
-    public String TrendsPage(){
+    public String TrendsPage(HttpSession session){
+        User user = (User)session.getAttribute("user");
         return "trends";
     }
 
@@ -86,7 +96,9 @@ public class SearchController {
                             @RequestParam("password") String password,
                             HttpSession session){
         User user = searchService.UserLogin(uName, password);
+
         if(user!=null){
+            session.setAttribute("user", user );
             return "redirect:/search/main";
         }else{
             return "redirect:/search/login";

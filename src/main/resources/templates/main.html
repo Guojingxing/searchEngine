@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="zh-CN" xmlns:th="http://www.w3.org/1999/xhtml">
 	<head>
 		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 		<meta charset="utf-8" />
@@ -72,10 +72,10 @@
 					<ul class="nav ace-nav">
 						<li class="light-blue dropdown-modal">
 							<a data-toggle="dropdown" href="#" class="dropdown-toggle">
-								<img class="nav-user-photo" src="/images/avatars/user.jpg" alt="Jason's Photo" />
+								<img class="nav-user-photo" src="/images/avatars/user.jpg" alt="User's Photo" />
 								<span class="user-info">
 									<small>Welcome,</small>
-									Jason
+									<div th:text="${session['user'].username}"></div>
 								</span>
 
 								<i class="ace-icon fa fa-caret-down"></i>
