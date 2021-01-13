@@ -2,8 +2,9 @@ package com.hust.searchengine.Controller;
 
 import com.hust.searchengine.Entity.ClassInfo;
 import com.hust.searchengine.Entity.Student;
+import com.hust.searchengine.Entity.User;
 import com.hust.searchengine.Service.ClassInfoService;
-import com.hust.searchengine.Service.StudentService;
+import com.hust.searchengine.Service.SearchService;
 import com.hust.searchengine.Utils.FileUtil;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,14 +13,15 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpSession;
 import java.util.List;
 
 @Controller
 @RequestMapping("search")
-public class StudentController {
+public class SearchController {
 // http://localhost:8080/search
     @Autowired
-    private StudentService studentService;
+    private SearchService searchService;
 
     @Autowired
     private ClassInfoService classInfoService;
@@ -74,6 +76,23 @@ public class StudentController {
         return "trends";
     }
 
+    @RequestMapping("login")
+    public String loginPage(){
+        return "login";
+    }
+
+    @PostMapping("login")
+    public String loginInfo(@RequestParam("username") String uName,
+                            @RequestParam("password") String password,
+                            HttpSession session){
+        User user = searchService.UserLogin(uName, password);
+        if(user!=null){
+            return "redirect:/search/main";
+        }else{
+            return "redirect:/search/login";
+        }
+    }
+
     // 学生管理系统
     @RequestMapping("list")
     public String getStudentByIDStuid(@RequestParam(value = "pageIndex",defaultValue = "1") Integer pageIndex,
@@ -85,13 +104,13 @@ public class StudentController {
         PageInfo<Student> studentPageInfo = null;
 
         if(clsid == 0 && stu_name.isEmpty()){
-            studentPageInfo = studentService.findAllStudent(pageIndex, pageSize);
+            studentPageInfo = searchService.findAllStudent(pageIndex, pageSize);
         }
         else if(clsid == 0 && !stu_name.isEmpty()){
-            studentPageInfo = studentService.findStudentByStuName(pageIndex, pageSize, stu_name);
+            studentPageInfo = searchService.findStudentByStuName(pageIndex, pageSize, stu_name);
         }
         else{
-            studentPageInfo = studentService.findStudentByClsIDStuName(pageIndex, pageSize, clsid, stu_name);
+            studentPageInfo = searchService.findStudentByClsIDStuName(pageIndex, pageSize, clsid, stu_name);
         }
 
         List<ClassInfo> classes = classInfoService.findAllClassInfo();
@@ -128,14 +147,14 @@ public class StudentController {
 
         // 2.保存文件名到数据库里
         student.setStu_image_url(fileName);
-        studentService.addStudentInfo(student);
+        searchService.addStudentInfo(student);
         return "redirect:/stu/list";
     }
 
     // 修改学生信息页面
     @GetMapping("update/{id}")
     public String updateStudent(@PathVariable("id") Integer stuid, Model model){
-        Student student = studentService.findStudentByID(stuid);
+        Student student = searchService.findStudentByID(stuid);
         List<ClassInfo> classes = classInfoService.findAllClassInfo();
         model.addAttribute("cls", classes);
         model.addAttribute("stu",student);
@@ -158,7 +177,7 @@ public class StudentController {
 
         // 2.保存文件名到数据库里
         student.setStu_image_url(fileName);
-        studentService.updateStudentByID(student);
+        searchService.updateStudentByID(student);
         return "redirect:/stu/list";
     }
 
@@ -168,8 +187,8 @@ public class StudentController {
                                 @RequestParam(value = "pageIndex",defaultValue = "1") Integer pageIndex,
                                 @RequestParam(value = "pageSize",defaultValue = "5") Integer pageSize,
                                 Model model){
-        studentService.deleteStudentByID(stuid);
-        PageInfo<Student> stuLists = studentService.findAllStudent(pageIndex, pageSize);
+        searchService.deleteStudentByID(stuid);
+        PageInfo<Student> stuLists = searchService.findAllStudent(pageIndex, pageSize);
         model.addAttribute("stus",stuLists);
         return "redirect:/stu/list";
     }
