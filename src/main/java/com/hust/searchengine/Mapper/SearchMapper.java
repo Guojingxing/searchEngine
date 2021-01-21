@@ -30,6 +30,9 @@ public interface SearchMapper {
                                  @Param("institution")String newinstitution,
                                  @Param("email")String newemail);
 
+    @Select("select username from user where username=#{newusername}")
+    String FindIfUsernameAlreadyExists(@Param("newusername")String username);
+
     //注册一个新的用户
     @Insert("insert into user(username, password, email) select #{username}, #{password}, #{email} from dual where not exists (select username from user where username=#{username})")
     Integer newUserSignup(@Param("email") String email,
@@ -68,6 +71,11 @@ public interface SearchMapper {
     //查找书签是否已添加
     @Select("select * from bookmark where doi=#{doi} and username=#{username}")
     Bookmark findBookmark();
+
+    //删除相应的书签
+    @Delete("delete from bookmark where doi=#{doi} and username=#{username}")
+    Integer deleteBookMark(String username, String doi);
+
 
     //以下代码可以忽略，请暂时不要删除！
     @Select("select stu.*, cls.clsName from classinfo cls join student_info stu on cls.clsid=stu.clsid")

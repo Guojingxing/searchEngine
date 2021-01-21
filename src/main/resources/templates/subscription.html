@@ -118,7 +118,7 @@
 				try{ace.settings.loadState('main-container')}catch(e){}
 			</script>
 
-			<div id="sidebar" class="sidebar                  responsive                    ace-save-state">
+			<div id="sidebar" class="sidebar responsive ace-save-state">
 				<script type="text/javascript">
 					try{ace.settings.loadState('sidebar')}catch(e){}
 				</script>
@@ -336,12 +336,12 @@
 								<!--页面上方订阅期刊表-->
 								<div id="tabs">
 									<ul>
-										<li th:each="sub : ${subs}">
-											<a th:href="@{'#'+${sub}}" style="font-size: medium" th:text="${sub.journal}">Nature</a>
+										<li th:each="sub_art, index : ${subs_arts}">
+											<a th:href="@{'#'+${#strings.replace(sub_art.key.journal,' ','_')}}" style="font-size: medium" th:text="${#strings.replace(sub_art.key.journal,' ','_')}">Nature</a>
 										</li>
 									</ul>
 
-									<div th:each="sub : ${subs}" th:id="${sub}">
+									<div th:each="sub_art, index : ${subs_arts}" th:id="${#strings.replace(sub_art.key.journal,' ','_')}">
 										<!--选中的期刊对应的文章表-->
 										<table class="table table-hover table-bordered b1">
 											<thead>
@@ -350,23 +350,40 @@
 												<th>作者</th>
 												<th>发表时间</th>
 												<th>操作</th>
-
 											</tr>
 											</thead>
 											<tbody>
-											<tr style="font-size: medium" th:each="art:${sub}">
+											<tr style="font-size: medium" th:each="art:${sub_art.value.list}">
 												<td th:text="${art.articlename}">京津冀绿色金融发展综合评价及影响因素研究</td>
 												<td th:text="${art.author}">王文静; 何泰屹; 武慧敏; 史娅婷</td>
 												<td th:text="${art.time}">2021-01-06 15:06</td>
 												<td>
 												<span>
 													<a th:href="${art.link}">下载</a>/
-													<a href="#">引用</a>/
-													<form th:action="@{/search/bookmark_insert(doi=${art.doi})}" method="post">
-														<input type="submit" class="btn btn-pink" placeholder="书签" />
+													<a href="#" data-toggle="modal" th:data-target="@{'#citing_'+${art.doi}}">引用</a>/
+													<form th:action="@{/search/bookmark(doi=${art.doi})}" method="post">
+														<button type="submit" class="btn btn-pink btn-sm">书签</button>
 													</form>
 												</span>
 												</td>
+												<!--引用模块框-->
+												<th:div class="modal fade bs-example-modal-lg" tabindex="-1" th:id="@{'citing_'+${art.doi}}" role="dialog" aria-labelledby="mySmallModalLabel">
+													<div class="modal-dialog modal-lg" role="document">
+														<div class="modal-content">
+															<div class="modal-header">
+																<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+																<h4 class="modal-title" id="myModalLabel2">引用格式</h4>
+															</div>
+															<div class="modal-body">
+																<span th:text="@{${art.articlename}+', '+${art.author}+', '+${art.journal}+', '+${#dates.format(art.time, 'yyyy')}+'.'}"></span>
+															</div>
+															<div class="modal-footer">
+																<button type="button" class="btn btn-primary" data-dismiss="modal">确定</button>
+																<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+															</div>
+														</div>
+													</div>
+												</th:div>
 											</tr>
 											<tr></tr>
 											<tr></tr>
@@ -375,20 +392,20 @@
 										<!--分页-->
 										<nav aria-label="Page navigation">
 											<ul class="pagination">
-												<li th:class="${arts.hasPreviousPage}?'':'disabled'">
-													<a th:href="${arts.hasPreviousPage}?@{/search/subscription(pageIndex=${arts.prePage}, activejournal=${activejournal})}:'#'" aria-label="Previous">
+												<li th:class="${sub_art.value.hasPreviousPage}?'':'disabled'">
+													<a th:href="${sub_art.value.hasPreviousPage}?@{/search/subscription(pageIndex=${sub_art.value.prePage})}:'#'" aria-label="Previous">
 														<span aria-hidden="true">&laquo;</span>
 													</a>
 												</li>
 
-												<th:block th:each="nav : ${arts.navigatepageNums}">
-													<li th:class="${nav==arts.pageNum}?'active':''">
-														<a th:href="@{/search/subscription(pageIndex=${nav}, keywords=${keywords})}" th:text="${nav}"></a>
+												<th:block th:each="nav : ${sub_art.value.navigatepageNums}">
+													<li th:class="${nav==sub_art.value.pageNum}?'active':''">
+														<a th:href="@{/search/subscription(pageIndex=${nav})}" th:text="${nav}"></a>
 													</li>
 												</th:block>
 
-												<li th:class="${arts.hasNextPage}?'':'disabled'">
-													<a th:href="${arts.hasNextPage}?@{/search/subscription(pageIndex=${arts.nextPage}, activejournal=${activejournal})}:'#'" aria-label="Next">
+												<li th:class="${sub_art.value.hasNextPage}?'':'disabled'">
+													<a th:href="${sub_art.value.hasNextPage}?@{/search/subscription(pageIndex=${sub_art.value.nextPage})}:'#'" aria-label="Next">
 														<span aria-hidden="true">&raquo;</span>
 													</a>
 												</li>

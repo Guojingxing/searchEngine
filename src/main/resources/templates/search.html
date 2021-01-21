@@ -339,7 +339,7 @@
 								<div class="space"></div>
 								<div class="space"></div>
 
-								<span th:text="${msg}" th:style="@{'color:'+${color}}"></span>
+								<!--<span th:text="${msg}" th:style="@{'color:'+${color}}"></span>-->
 
 								<!--搜索结果表-->
 								<table class="table table-bordered b1">
@@ -365,7 +365,7 @@
 											<span>
 												<a th:href="${result.link}">下载</a>/
 												<a href="#" data-toggle="modal" th:data-target="@{'#citing_'+${result.doi}}">引用</a>
-												<form th:action="@{/search/bookmark_insert(doi=${result.doi}, keywords=${keywords})}" method="post">
+												<form th:action="@{/search/bookmark(doi=${result.doi})}" method="post">
                                                     <button type="submit" class="btn btn-success btn-sm" name="bmk_button" >书签</button>
 												</form>
 											</span>

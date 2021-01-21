@@ -17,6 +17,8 @@ public interface SearchService {
 
     Integer updateUserByUsername(String oldusername, String newusername, String newpassword, boolean newsex, String newinstitution, String newemail);
 
+    String FindIfUsernameAlreadyExists(@Param("newusername")String username);
+
     User newUserSignup(String email, String username, String password);
 
     List<Trends> getAllTrends();
@@ -38,6 +40,8 @@ public interface SearchService {
     Integer InsertBookmark(String username, String doi);
 
     Bookmark findBookmark();
+
+    Integer deleteBookMark(String username, String doi);
 
     //此处以下的代码可忽略，但不要删除！
     PageInfo<Student> findAllStudent(Integer pageIndex, Integer pageSize);

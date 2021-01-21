@@ -1,11 +1,20 @@
 package com.hust.searchengine.Entity;
 
 public class User {
+//    private Integer userid;
     private String username;
     private String password;
     private boolean sex;
     private String institution;
     private String email;
+
+//    public Integer getUserid() {
+//        return userid;
+//    }
+//
+//    public void setUserid(Integer userid) {
+//        this.userid = userid;
+//    }
 
     public User(String username, String password, String email) {
         this.username = username;

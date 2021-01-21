@@ -326,6 +326,7 @@
 											此表格来自于个人收藏的论文
 										</small>
 									</h1>
+
 								</div>
 							</div>
 						</div>
@@ -333,13 +334,12 @@
 						<div class="row">
 							<!-- PAGE CONTENT BEGINS -->
 							<div class="col-xs-12">
-
+								<span th:text="${msg}" th:style="@{'color:'+${color}}"></span>
+								<div class="clearfix">
+									<div class="pull-right tableTools-container"></div>
+								</div>
 								<!--书签表-->
 								<div class="row">
-									<h3 class="header smaller lighter blue">个人书签详细列表</h3>
-									<div class="clearfix">
-										<div class="pull-right tableTools-container"></div>
-									</div>
 									<!-- div.dataTables_borderWrap -->
 									<div>
 										<table id="dynamic-table" class="table table-striped table-bordered table-hover">
@@ -381,13 +381,13 @@
 													<p>
 													<span>
 														<a th:href="${bookmark.link}">查看</a>/
-														<a href="#" data-toggle="modal" th:data-target="@{'#citing_'+${result.doi}}">引用</a>/
-														<a href="@{'bookmark/delete/'+${bookmark.doi}}">删除</a>
+														<a href="#" data-toggle="modal" th:data-target="@{'#citing_'+${bookmark.doi}}">引用</a>/
+														<a href="#" data-toggle="modal" th:data-target="@{'#delete_'+${bookmark.doi}}">删除</a>
 													</span>
 													</p>
 												</td>
 												<!--引用模块框-->
-												<th:div class="modal fade bs-example-modal-lg" tabindex="-1" th:id="@{'citing_'+${result.doi}}" role="dialog" aria-labelledby="mySmallModalLabel">
+												<th:div class="modal fade bs-example-modal-lg" tabindex="-1" th:id="@{'citing_'+${bookmark.doi}}" role="dialog" aria-labelledby="mySmallModalLabel">
 													<div class="modal-dialog modal-lg" role="document">
 														<div class="modal-content">
 															<div class="modal-header">
@@ -395,10 +395,28 @@
 																<h4 class="modal-title" id="myModalLabel2">引用格式</h4>
 															</div>
 															<div class="modal-body">
-																<span th:text="@{${result.articlename}+', '+${result.author}+', '+${result.journal}+', '+${#dates.format(result.time, 'yyyy')}+'.'}"></span>
+																<span th:text="@{${bookmark.articlename}+', '+${bookmark.author}+', '+${bookmark.journal}+', '+${#dates.format(bookmark.time, 'yyyy')}+'.'}"></span>
 															</div>
 															<div class="modal-footer">
 																<button type="button" class="btn btn-primary" data-dismiss="modal">确定</button>
+																<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+															</div>
+														</div>
+													</div>
+												</th:div>
+												<!--删除模块框-->
+												<th:div class="modal fade bs-example-modal-sm" tabindex="-1" th:id="@{'delete_'+${bookmark.doi}}" role="dialog" aria-labelledby="mySmallModalLabel">
+													<div class="modal-dialog modal-sm" role="document">
+														<div class="modal-content">
+															<div class="modal-header">
+																<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+																<h4 class="modal-title" id="myModalLabel3">删除确认</h4>
+															</div>
+															<div class="modal-body">
+																<span>确认要删除该书签吗？</span>
+															</div>
+															<div class="modal-footer">
+																<button type="button" class="btn btn-primary" th:onclick="@{'window.location.href=\'bookmark/delete/\'+\''+${bookmark.doi}+'\''}">确定</button>
 																<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
 															</div>
 														</div>

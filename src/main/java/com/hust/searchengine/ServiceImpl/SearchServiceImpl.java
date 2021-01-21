@@ -45,6 +45,11 @@ public class SearchServiceImpl implements SearchService {
     }
 
     @Override
+    public String FindIfUsernameAlreadyExists(String username) {
+        return searchMapper.FindIfUsernameAlreadyExists(username);
+    }
+
+    @Override
     public User newUserSignup(String email, String username, String password) {
         boolean isInserted = searchMapper.newUserSignup(email, username, password)==0?false:true;
         if(isInserted)return new User(username, password, email);
@@ -115,6 +120,11 @@ public class SearchServiceImpl implements SearchService {
     @Override
     public Bookmark findBookmark() {
         return searchMapper.findBookmark();
+    }
+
+    @Override
+    public Integer deleteBookMark(String username, String doi) {
+        return searchMapper.deleteBookMark(username, doi);
     }
 
     //此处以下的代码可忽略，但不要删除！

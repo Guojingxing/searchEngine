@@ -4,9 +4,9 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Bookmark {
-    String username;
-    String doi;
-    Date insert_time;
+    private String username;
+    private String doi;
+    private Date insert_time;
 
     public String getInsert_time() {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");

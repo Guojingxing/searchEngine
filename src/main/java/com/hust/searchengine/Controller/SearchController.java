@@ -13,7 +13,10 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.net.http.HttpTimeoutException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static org.apache.tomcat.jni.Time.sleep;
 
@@ -56,13 +59,17 @@ public class SearchController {
             return "redirect:/search/login";
     }
 
-    //书签
-    @RequestMapping("bookmark")
+    //书签（没有分页）
+    @GetMapping("bookmark")
     public String BookmarkPage(Model model, HttpSession session){
         User user = (User)session.getAttribute("user");
         if(user!=null){
             List<Article> bookmarks = searchService.findAllBookmarks(user.getUsername());
+            String message = "";
+            String color = "red";
             model.addAttribute("bookmarks", bookmarks);
+            model.addAttribute("msg", message);
+            model.addAttribute("color", color);
             return "bookmark";
         }
         else
@@ -71,9 +78,9 @@ public class SearchController {
     }
 
     //插入书签
-    @PostMapping("bookmark_insert")
+    @PostMapping("bookmark")
     public String InsertBookmark(@RequestParam("doi") String doi,
-                                 @RequestParam("keywords") String keywords,
+                                 /*@RequestParam("keywords") String keywords,*/
                                  HttpServletRequest request,
                                  HttpSession session, Model model){
         User user = (User)session.getAttribute("user");
@@ -82,24 +89,37 @@ public class SearchController {
             String reqUrl = request.getHeader("Referer");
             String host = request.getRequestURL().toString().replaceAll(request.getRequestURI().toString(),"");
             String resourceUrl = reqUrl.replaceAll(host, "");
-            String page = "redirect:"+ resourceUrl + "?" + request.getQueryString();
+            //String page = "redirect:"+ resourceUrl; /*+ "?" + request.getQueryString()*/
             String message;
             String color;
             boolean already_added = searchService.InsertBookmark(username, doi)==0;
             if(already_added) {
                 message = "您已添加过该书签，添加书签失败！";
                 color = "red";
-            }else {
+            }else{
                 message = "添加书签成功！";
                 color = "green";
             }
-            model.addAttribute("already_added", already_added);
-            model.addAttribute("keywords", keywords);
+            List<Article> bookmarks = searchService.findAllBookmarks(user.getUsername());
+            model.addAttribute("bookmarks", bookmarks);
             model.addAttribute("color", color);
             model.addAttribute("msg", message);
-            return page;
+            return "bookmark";
         }else
             return "redirect:/search/login";
+    }
+
+    //删除书签
+    @GetMapping("bookmark/delete/{doi}")
+    public String DeleteBookmark(@PathVariable("doi")String doi,
+                                 HttpSession session, Model model){
+        User user = (User)session.getAttribute("user");
+        if(user!=null){
+            String username = user.getUsername();
+            searchService.deleteBookMark(username, doi);
+            return "redirect:/search/bookmark";
+        }
+        return "redirect:/search/login";
     }
 
     //登出
@@ -213,9 +233,10 @@ public class SearchController {
     public String updateUserinfo(HttpSession session,
                                  @RequestParam("passwordconfirmed") String password,
                                  User userupdated, Model model){
-        // 保存到数据库里
+
         User user = (User)session.getAttribute("user");
         if(user!=null) {
+            //判断输入的密码是否正确
             if(user.getPassword().equals(password)){
                 String oldusername = user.getUsername();
                 String newu = userupdated.getUsername();
@@ -223,10 +244,20 @@ public class SearchController {
                 boolean news = userupdated.isSex();
                 String newi = userupdated.getInstitution();
                 String newe = userupdated.getEmail();
+                String message = "";
+                //判断数据库内是否已存在相应用户名
+                if(!oldusername.equals(newu)&&newu.equals(searchService.FindIfUsernameAlreadyExists(newu))){
+                    message = "修改用户名失败，已存在此用户名！";
+                    model.addAttribute("msg", message);
+                    return "settings";
+                }
+                // 保存到数据库里
                 searchService.updateUserByUsername(oldusername, newu, newp, news, newi, newe);
                 //重新设置用户session，以新修改的username显示在右上角
                 session.removeAttribute("user");
                 session.setAttribute("user", userupdated);
+
+                model.addAttribute("msg", message);
                 return "redirect:/search/profile";
             }else{
                 String message = "密码错误，请重新输入！";
@@ -247,10 +278,15 @@ public class SearchController {
         if(user!=null) {
             String username = user.getUsername();
             List<Journal> subs = searchService.findAllSubJournalsByUsernameNotPaged(username);
-            PageInfo<Article> articleOnActiveJournal = searchService.findArticleByJournal(pageIndex, pageSize, activeJournal);
+            Map<Journal, PageInfo<Article>> subs_arts = new HashMap<>();
+            for (Journal sub : subs) {
+                String journal = sub.getJournal();
+                PageInfo<Article> articlesOnSub = searchService.findArticleByJournal(pageIndex, pageSize, journal);
+                subs_arts.put(sub, articlesOnSub);
+            }
             model.addAttribute("subs", subs);
             model.addAttribute("activejournal", activeJournal);
-            model.addAttribute("arts", articleOnActiveJournal);
+            model.addAttribute("subs_arts", subs_arts);
             return "subscription";
         }
         else
