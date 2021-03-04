@@ -204,6 +204,7 @@ public class SearchController {
         }
     }
 
+    //添加订阅领域
     @PostMapping("field/{field}")
     public String AddFieldPage(@RequestParam(value = "pageIndex",defaultValue = "1") Integer pageIndex,
                             @RequestParam(value = "pageSize",defaultValue = "15") Integer pageSize,
@@ -233,7 +234,37 @@ public class SearchController {
         }
     }
 
-    //查找该领域下所有文章
+    //删除订阅领域
+    @PostMapping("delete/field/{field}")
+    public String DeleteField(@RequestParam(value = "pageIndex",defaultValue = "1") Integer pageIndex,
+                               @RequestParam(value = "pageSize",defaultValue = "15") Integer pageSize,
+                               @PathVariable("field")String field,
+                               HttpSession session, Model model){
+        User user = (User)session.getAttribute("user");
+        String message, color;
+
+        PageInfo<Article> articles = searchService.findArticleByField(pageIndex, pageSize, field);
+
+        model.addAttribute("field", field);
+        model.addAttribute("results", articles);
+        if(user!=null){
+            String username = user.getUsername();
+            if(searchService.deleteField(username, field) > 0){
+                message = "成功取消订阅该领域！";
+                color = "green";
+            }else{
+                message = "您未订阅过该领域！";
+                color = "red";
+            }
+            model.addAttribute("msg", message);
+            model.addAttribute("color", color);
+            return "field";
+        }else {
+            return "redirect:/search/login";
+        }
+    }
+
+    //查找该作者的所有文章
     @GetMapping("author/{author}")
     public String AuthorPage(@RequestParam(value = "pageIndex",defaultValue = "1") Integer pageIndex,
                             @RequestParam(value = "pageSize",defaultValue = "15") Integer pageSize,
@@ -272,6 +303,36 @@ public class SearchController {
                 color = "green";
             }else{
                 message = "添加订阅作者失败，已添加过订阅！";
+                color = "red";
+            }
+            model.addAttribute("msg", message);
+            model.addAttribute("color", color);
+            return "author";
+        }else {
+            return "redirect:/search/login";
+        }
+    }
+
+    //删除订阅作者
+    @PostMapping("delete/author/{author}")
+    public String DeleteAuthor(@RequestParam(value = "pageIndex",defaultValue = "1") Integer pageIndex,
+                              @RequestParam(value = "pageSize",defaultValue = "15") Integer pageSize,
+                              @PathVariable("author")String author,
+                              HttpSession session, Model model){
+        User user = (User)session.getAttribute("user");
+        String message, color;
+
+        PageInfo<Article> articles = searchService.findArticleByAuthor(pageIndex, pageSize, author);
+
+        model.addAttribute("author", author);
+        model.addAttribute("results", articles);
+        if(user!=null){
+            String username = user.getUsername();
+            if(searchService.deleteAuthor(username, author) > 0){
+                message = "成功取消订阅该作者！";
+                color = "green";
+            }else{
+                message = "您未订阅过该作者！";
                 color = "red";
             }
             model.addAttribute("msg", message);

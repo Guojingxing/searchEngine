@@ -326,9 +326,19 @@
 								<!-- PAGE CONTENT BEGINS -->
 
 								<h2 class="header smaller lighter blue" th:text="@{${author}+'参与发表的所有文章'}"></h2>
-								<form method="post" th:action="@{'/search/author/'+${author}}">
-									<button class="btn btn-pink btn-lg" type="submit">订阅该作者</button>
-								</form>
+								<div class="row">
+									<div class="col-md-2">
+										<form method="post" th:action="@{'/search/author/'+${author}}">
+											<button class="btn btn-success btn-lg" type="submit">订阅该作者</button>
+										</form>
+									</div>
+									<div class="col-md-8"></div>
+									<div class="col-md-2">
+										<form method="post" th:action="@{'/search/delete/author/'+${author}}">
+											<button class="btn btn-danger btn-lg align-right" type="submit">取消订阅该作者</button>
+										</form>
+									</div>
+								</div>
 								<span th:text="${msg}" th:style="@{'color:'+${color}}"></span>
 
 								<!--搜索结果表-->

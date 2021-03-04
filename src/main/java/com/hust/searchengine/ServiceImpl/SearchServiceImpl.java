@@ -147,6 +147,16 @@ public class SearchServiceImpl implements SearchService {
     }
 
     @Override
+    public Integer deleteField(String username, String field) {
+        return searchMapper.deleteField(username, field);
+    }
+
+    @Override
+    public Integer deleteAuthor(String username, String author) {
+        return searchMapper.deleteAuthor(username, author);
+    }
+
+    @Override
     public Article findArticleByDoi(String doi) {
         return searchMapper.findArticleByDoi(doi);
     }
