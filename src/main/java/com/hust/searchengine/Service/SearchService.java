@@ -42,6 +42,10 @@ public interface SearchService {
 
     Integer insertAuthor(String username, String author);
 
+    Integer deleteField(String username, String field);
+
+    Integer deleteAuthor(String username, String author);
+
     Article findArticleByDoi(String doi);
 
     List<Journal> findAllSubJournalsByUsernameNotPaged(String username);
