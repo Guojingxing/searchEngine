@@ -248,7 +248,7 @@
 												<div class="col-md-2"></div>
 												<div class="col-md-2">
 													<select name="type1" class="form-group btn btn-pink btn-xs" id="form-field-select-1">
-														<option value="articlename" th:selected="${type1=='articlename'}">主题</option>
+														<option value="articlename" th:selected="${type1==''||type1=='articlename'}">主题</option>
 														<option value="doi" th:selected="${type1=='doi'}">DOI</option>
 														<option value="article_abstract" th:selected="${type1=='article_abstract'}">摘要</option>
 														<option value="author" th:selected="${type1=='author'}">作者</option>
@@ -264,7 +264,7 @@
 											<div class="row">
 												<div class="col-md-2">
 													<select name="selector1" class="form-group btn btn-pink btn-xs" id="form-field-select-2">
-														<option value="and" th:selected="${selector1=='and'}">AND</option>
+														<option value="and" th:selected="${selector1==''||selector1=='and'}">AND</option>
 														<option value="or" th:selected="${selector1=='or'}">OR</option>
 														<option value="and not" th:selected="${selector1=='and not'}">NOT</option>
 													</select>
@@ -274,7 +274,7 @@
 														<option value="articlename" th:selected="${type2=='articlename'}">主题</option>
 														<option value="doi" th:selected="${type2=='doi'}">DOI</option>
 														<option value="article_abstract" th:selected="${type2=='article_abstract'}">摘要</option>
-														<option value="author" th:selected="${type2=='author'}">作者</option>
+														<option value="author" th:selected="${type2==''||type2=='author'}">作者</option>
 														<option value="field" th:selected="${type2=='field'}">领域</option>
 														<option value="journal" th:selected="${type2=='journal'}">文献来源</option>
 													</select>
@@ -286,7 +286,7 @@
 											<div class="row">
 												<div class="col-md-2">
 													<select name="selector2" class="form-group btn btn-pink btn-xs" id="form-field-select-4">
-														<option value="and" th:selected="${selector2=='and'}">AND</option>
+														<option value="and" th:selected="${selector2==''||selector2=='and'}">AND</option>
 														<option value="or" th:selected="${selector2=='or'}">OR</option>
 														<option value="and not" th:selected="${selector2=='and not'}">NOT</option>
 													</select>
@@ -298,7 +298,7 @@
 														<option value="article_abstract" th:selected="${type3=='article_abstract'}">摘要</option>
 														<option value="author" th:selected="${type3=='author'}">作者</option>
 														<option value="field" th:selected="${type3=='field'}">领域</option>
-														<option value="journal" th:selected="${type3=='journal'}">文献来源</option>
+														<option value="journal" th:selected="${type3==''||type3=='journal'}">文献来源</option>
 													</select>
 												</div>
 												<div class="col-md-8">
