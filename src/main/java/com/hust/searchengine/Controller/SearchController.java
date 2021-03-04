@@ -184,23 +184,24 @@ public class SearchController {
         return "redirect:/search/login";
     }
 
-    //查找该领域下所有文章（登陆后才有的功能）
+    //查找该领域下所有文章
     @GetMapping("field/{field}")
     public String FieldPage(@RequestParam(value = "pageIndex",defaultValue = "1") Integer pageIndex,
                                  @RequestParam(value = "pageSize",defaultValue = "15") Integer pageSize,
                                  @PathVariable("field")String field,
                                  HttpSession session, Model model){
         User user = (User)session.getAttribute("user");
+        String message = "", color = "";
+        PageInfo<Article> articles = searchService.findArticleByField(pageIndex, pageSize, field);
+        model.addAttribute("field", field);
+        model.addAttribute("results", articles);
+        model.addAttribute("msg", message);
+        model.addAttribute("color", color);
         if(user!=null){
-            String message = "", color = "";
-            PageInfo<Article> articles = searchService.findArticleByField(pageIndex, pageSize, field);
-            model.addAttribute("field", field);
-            model.addAttribute("results", articles);
-            model.addAttribute("msg", message);
-            model.addAttribute("color", color);
             return "field";
+        }else{
+            return "field_beforelogin";
         }
-        return "redirect:/search/login";
     }
 
     @PostMapping("field/{field}")
@@ -209,24 +210,76 @@ public class SearchController {
                             @PathVariable("field")String field,
                             HttpSession session, Model model){
         User user = (User)session.getAttribute("user");
+        String message, color;
+
+        PageInfo<Article> articles = searchService.findArticleByField(pageIndex, pageSize, field);
+
+        model.addAttribute("field", field);
+        model.addAttribute("results", articles);
         if(user!=null){
-            String message, color;
             String username = user.getUsername();
             if(searchService.insertField(username, field) > 0){
-                message = "成功添加订阅！";
+                message = "成功订阅该领域！";
                 color = "green";
             }else{
-                message = "添加订阅失败，已添加过订阅！";
+                message = "添加订阅领域失败，已添加过订阅！";
                 color = "red";
             }
-            PageInfo<Article> articles = searchService.findArticleByField(pageIndex, pageSize, field);
             model.addAttribute("msg", message);
             model.addAttribute("color", color);
-            model.addAttribute("field", field);
-            model.addAttribute("results", articles);
             return "field";
+        }else {
+            return "redirect:/search/login";
         }
-        return "redirect:/search/login";
+    }
+
+    //查找该领域下所有文章
+    @GetMapping("author/{author}")
+    public String AuthorPage(@RequestParam(value = "pageIndex",defaultValue = "1") Integer pageIndex,
+                            @RequestParam(value = "pageSize",defaultValue = "15") Integer pageSize,
+                            @PathVariable("author")String author,
+                            HttpSession session, Model model){
+        User user = (User)session.getAttribute("user");
+        String message = "", color = "";
+        PageInfo<Article> articles = searchService.findArticleByAuthor(pageIndex, pageSize, author);
+        model.addAttribute("author", author);
+        model.addAttribute("results", articles);
+        model.addAttribute("msg", message);
+        model.addAttribute("color", color);
+        if(user!=null){
+            return "author";
+        }else{
+            return "author_beforelogin";
+        }
+    }
+
+    @PostMapping("author/{author}")
+    public String AddAuthorPage(@RequestParam(value = "pageIndex",defaultValue = "1") Integer pageIndex,
+                               @RequestParam(value = "pageSize",defaultValue = "15") Integer pageSize,
+                               @PathVariable("author")String author,
+                               HttpSession session, Model model){
+        User user = (User)session.getAttribute("user");
+        String message, color;
+
+        PageInfo<Article> articles = searchService.findArticleByAuthor(pageIndex, pageSize, author);
+
+        model.addAttribute("author", author);
+        model.addAttribute("results", articles);
+        if(user!=null){
+            String username = user.getUsername();
+            if(searchService.insertAuthor(username, author) > 0){
+                message = "成功订阅该作者！";
+                color = "green";
+            }else{
+                message = "添加订阅作者失败，已添加过订阅！";
+                color = "red";
+            }
+            model.addAttribute("msg", message);
+            model.addAttribute("color", color);
+            return "author";
+        }else {
+            return "redirect:/search/login";
+        }
     }
 
     //登出
