@@ -222,6 +222,8 @@ public class SearchServiceImpl implements SearchService {
         return new PageInfo<>(lists);
     }
 
+    //title+'|'+author+'|'+abstract+'|'+str(time)+'|'+field+'|'+link+'|'+journal
+
 //    public List<Article> senate(String data) {
 //        String ip = "localhost";
 //        int port = 9999;
