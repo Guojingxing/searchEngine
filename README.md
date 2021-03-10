@@ -38,7 +38,7 @@ http://localhost:8080/search/main
 
 即可打开相应的页面。页面如下图所示（要允许定位功能）：
 
-![主页界面](https://raw.githubusercontent.com/Guojingxing/searchEngine/master/README.assets/image-20210310130207975.png)
+![主页界面](https://github.com/Guojingxing/searchEngine/blob/master/README.assets/image-20210310130207975.png)
 
 ### 具体使用
 
