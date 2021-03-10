@@ -1,7 +1,7 @@
 # searchEngine
 #### **Notice:本项目是源搜索引擎项目的存档**
 
-*源项目地址：*https://github.com/lzwroot/searchEngine
+*源项目地址：* https://github.com/lzwroot/searchEngine
 
 ---
 
@@ -29,7 +29,7 @@ http://localhost:8080/search/main
 
 即可打开相应的页面。页面如下图所示（要允许定位功能）：
 
-![image-20210310130207975](.\README.assets\image-20210310130207975.png)
+![主页界面](https://raw.githubusercontent.com/Guojingxing/searchEngine/master/README.assets/image-20210310130207975.png)
 
 ### 具体使用
 
