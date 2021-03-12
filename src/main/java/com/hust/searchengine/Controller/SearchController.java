@@ -622,7 +622,7 @@ public class SearchController {
             return "redirect:/search/login";
     }
 
-    //热搜
+    //历史记录
     @GetMapping("history")
     public String HistoryPage(HttpSession session, Model model){
         User user = (User)session.getAttribute("user");

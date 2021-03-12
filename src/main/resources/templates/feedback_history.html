@@ -279,7 +279,7 @@
 							</li>
 
 							<li class="active">
-								提交反馈
+								历史反馈
 							</li>
 						</ul><!-- /.breadcrumb -->
 
@@ -369,9 +369,9 @@
 						</div>
 
 						<div class="row">
-							<div class="col-md-2">
+							<div class="col-sm-2">
 							</div><!-- /.col -->
-							<div class="col-md-8">
+							<div class="col-sm-8">
 								<!-- PAGE CONTENT BEGINS -->
 
 								<!-- 反馈框 -->
@@ -399,9 +399,11 @@
 												</div>
 											</form>
 											<div class="dialogs" th:each="feedback:${#lists.sort(feedbacks, comparator)}">
-												<th:div class="itemdiv dialogdiv">
+												<div class="itemdiv dialogdiv">
 													<div class="user">
-														<img alt="Alexa's Avatar" th:src="${session['user'].image_url!=null}?@{'/pics/upload/'+${session['user'].image_url}}:'/images/avatars/user.jpg'" th:alt="${#strings.toUpperCase(#strings.substring(session['user'].username,0,1))}" style="width:40px;height:40px;" />
+														<a href="/search/profile">
+															<img alt="Alexa's Avatar" th:src="${session['user'].image_url!=null}?@{'/pics/upload/'+${session['user'].image_url}}:'/images/avatars/user.jpg'" th:alt="${#strings.toUpperCase(#strings.substring(session['user'].username,0,1))}" style="width:40px;height:40px;" />
+														</a>
 													</div>
 
 													<div class="body">
@@ -444,7 +446,7 @@
 															</a>
 														</div>
 													</div>
-												</th:div>
+												</div>
 											</div>
 										</div><!-- /.widget-main -->
 									</div><!-- /.widget-body -->
@@ -471,7 +473,7 @@
 
 								<!-- PAGE CONTENT ENDS -->
 							</div><!-- /.col -->
-							<div class="col-md-2">
+							<div class="col-sm-2">
 							</div><!-- /.col -->
 						</div><!-- /.row -->
 					</div><!-- /.page-content -->

@@ -76,9 +76,11 @@ public class ManagerController {
             Integer totalArticleNum = managerService.totalNumberOfArticles();
             Integer totalUserNum = managerService.totalNumberOfUsers();
             Integer totalOnlineUserNum = 0;
+            Integer totalFeedbackNum = managerService.totalNumberOfFeedbacks();
             model.addAttribute("total_article_number", totalArticleNum);
             model.addAttribute("total_user_number", totalUserNum);
             model.addAttribute("total_online_user_number", totalOnlineUserNum);
+            model.addAttribute("total_feedback_number", totalFeedbackNum);
             return "manager_dashboard";
         }
         else

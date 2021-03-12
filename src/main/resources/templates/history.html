@@ -419,6 +419,9 @@
 														<a href="#" data-toggle="modal" th:data-target="@{'#citing_'+${#strings.replace(#strings.replace(#strings.replace(#strings.replace(his.doi,':','_'),'.','_'),'/','_'),'-','_')}}">引用</a>/
 														<a href="#" data-toggle="modal" th:data-target="@{'#delete_'+${#strings.replace(#strings.replace(#strings.replace(#strings.replace(his.doi,':','_'),'.','_'),'/','_'),'-','_')}}">删除</a>
 													</span>
+														<form th:action="@{/search/bookmark(doi=${his.doi})}" method="post">
+															<button type="submit" class="btn btn-success btn-sm" name="bmk_button" >书签</button>
+														</form>
 														</p>
 													</td>
 													<!--引用模块框-->
