@@ -153,8 +153,6 @@ public class ManagerController {
         Manager manager = (Manager)session.getAttribute("manager");
         if(manager!=null) {
             User oldUser = searchService.findUserByUsername(oldUsername);
-            //检查密码对不对
-            //if(cPassword.equals(oldUser.getPassword())) {
             String newUsername = userUpdated.getUsername();
             String message = "";
             //判断数据库内是否已存在相应用户名
@@ -169,17 +167,14 @@ public class ManagerController {
             String newInstitution = userUpdated.getInstitution();
             String newEmail = userUpdated.getEmail();
             String newImage_url = userUpdated.getImage_url();
-            // 保存到数据库里
-            searchService.updateUserByUsername(oldUsername, newUsername, newPassword, newSex, newInstitution, newEmail, newImage_url);
-            model.addAttribute("msg", message);
+            //判断用户名是否为空
+            if(userUpdated.getUsername()==null||userUpdated.getUsername().equals("")){
+                message = "用户名不可为空！";
+            }// 保存到数据库里
+            else {
+                searchService.updateUserByUsername(oldUsername, newUsername, newPassword, newSex, newInstitution, newEmail, newImage_url);
+            }model.addAttribute("msg", message);
             return "redirect:/manager/detail/" + newUsername;
-            //}
-
-//            else{
-//                String message = "密码错误，请重新输入！";
-//                model.addAttribute("msg", message);
-//                return "manage_user_update";
-//            }
         }
         else
             return "redirect:/manager/login";

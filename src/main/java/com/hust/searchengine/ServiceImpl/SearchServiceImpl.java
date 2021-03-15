@@ -5,6 +5,8 @@ import com.hust.searchengine.Mapper.SearchMapper;
 import com.hust.searchengine.Service.SearchService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +21,8 @@ public class SearchServiceImpl implements SearchService {
 
     @Autowired
     private SearchMapper searchMapper;
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(SimpleCharVerifyCodeGenImpl.class);
 
     @Override
     public User UserLogin(String username, String password) {
@@ -223,6 +227,8 @@ public class SearchServiceImpl implements SearchService {
 
             out.write(data.getBytes(StandardCharsets.UTF_8));
 
+            LOGGER.info("搜索服务器连接成功！");
+
             String result = inRead.readLine();
             List<Article> articles = new ArrayList<>();
             //List<Article> articles = null;
@@ -248,7 +254,7 @@ public class SearchServiceImpl implements SearchService {
             return articles;
         }
         catch(Exception e) {
-            System.out.println("search.py可能未启动或者启动失败，将使用数据库搜索");
+            LOGGER.info("search.py可能未启动或者启动失败，将使用数据库搜索");
         }
         return searchMapper.findArticleByKeywords(data);
     }

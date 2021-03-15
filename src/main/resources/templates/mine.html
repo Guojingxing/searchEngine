@@ -3,7 +3,7 @@
 	<head>
 		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 		<meta charset="utf-8" />
-		<title>我的个人主页 - Loogle 学术搜索</title>
+		<title>我的订阅 - Loogle 学术搜索</title>
 
 		<meta name="description" content="" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
@@ -98,7 +98,7 @@
 								</li>
 
 								<li>
-									<a href="profile">
+									<a href="/search/profile">
 										<i class="ace-icon fa fa-user"></i>
 										个人资料
 									</a>
@@ -166,9 +166,9 @@
 				<ul class="nav nav-list">
 					
 					<li class="">
-						<a href="subscription">
-							<i class="menu-icon fa fa-bell"></i>
-							<span class="menu-text"> 订阅 </span>
+						<a href="/search/history">
+							<i class="menu-icon glyphicon glyphicon-time"></i>
+							<span class="menu-text"> 历史 </span>
 						</a>
 
 						<b class="arrow"></b>
@@ -184,7 +184,7 @@
 					</li>
 
 					<li class="active">
-						<a href="mine">
+						<a href="/search/profile">
 							<i class="menu-icon fa fa-home"></i>
 							<span class="menu-text"> 我的 </span>
 						</a>
@@ -209,9 +209,9 @@
 							</li>
 
 							<li class="">
-								<a href="profile">
+								<a href="/search/settings">
 									<i class="menu-icon fa fa-caret-right"></i>
-									个人信息
+									修改信息
 								</a>
 
 								<b class="arrow"></b>
@@ -364,10 +364,11 @@
 							<div class="col-xs-12">
 								<!-- PAGE CONTENT BEGINS -->
 
-								<h2 class="header smaller lighter blue">我订阅的作者、领域、期刊</h2>
+								<h2 class="header smaller lighter blue">我订阅的作者、领域</h2>
 
 								<!--订阅-->
 								<div class="row">
+									<div class="col-md-1"></div>
 									<div class="col-md-4">
 										<table style="font-size: large" class="table table-bordered b1">
 											<thead>
@@ -388,25 +389,26 @@
 										<nav aria-label="Page navigation">
 											<ul class="pagination" id="author">
 												<li th:class="${authors.hasPreviousPage}?'':'disabled'">
-													<a th:href="${authors.hasPreviousPage}?@{/search/mine(pageIndex1=${authors.prePage})}:'#'" aria-label="Previous">
+													<a th:href="${authors.hasPreviousPage}?@{/search/profile(pageIndex1=${authors.prePage})}:'#'" aria-label="Previous">
 														<span aria-hidden="true">&laquo;</span>
 													</a>
 												</li>
 
 												<th:block th:each="nav1 : ${authors.navigatepageNums}">
 													<li th:class="${nav1==authors.pageNum}?'active':''">
-														<a th:href="@{/search/mine(pageIndex1=${nav1},pageIndex2=${nav2},pageIndex3=${nav3})}" th:text="${nav1}"></a>
+														<a th:href="@{/search/profile(pageIndex1=${nav1},pageIndex2=${nav2},pageIndex3=${nav3})}" th:text="${nav1}"></a>
 													</li>
 												</th:block>
 
 												<li th:class="${authors.hasNextPage}?'':'disabled'">
-													<a th:href="${authors.hasNextPage}?@{/search/mine(pageIndex1=${authors.nextPage})}:'#'" aria-label="Next">
+													<a th:href="${authors.hasNextPage}?@{/search/profile(pageIndex1=${authors.nextPage})}:'#'" aria-label="Next">
 														<span aria-hidden="true">&raquo;</span>
 													</a>
 												</li>
 											</ul>
 										</nav>
 									</div>
+									<div class="col-md-2"></div>
 									<div class="col-md-4">
 										<table style="font-size: large" class="table table-bordered b1">
 											<thead>
@@ -427,64 +429,26 @@
 										<nav aria-label="Page navigation">
 											<ul class="pagination" id="field">
 												<li th:class="${fields.hasPreviousPage}?'':'disabled'">
-													<a th:href="${fields.hasPreviousPage}?@{/search/mine(pageIndex2=${fields.prePage})}:'#'" aria-label="Previous">
+													<a th:href="${fields.hasPreviousPage}?@{/search/profile(pageIndex2=${fields.prePage})}:'#'" aria-label="Previous">
 														<span aria-hidden="true">&laquo;</span>
 													</a>
 												</li>
 
 												<th:block th:each="nav2 : ${fields.navigatepageNums}">
 													<li th:class="${nav2==fields.pageNum}?'active':''">
-														<a th:href="@{/search/mine(pageIndex1=${nav1},pageIndex2=${nav2},pageIndex3=${nav3})}" th:text="${nav2}"></a>
+														<a th:href="@{/search/profile(pageIndex1=${nav1},pageIndex2=${nav2},pageIndex3=${nav3})}" th:text="${nav2}"></a>
 													</li>
 												</th:block>
 
 												<li th:class="${fields.hasNextPage}?'':'disabled'">
-													<a th:href="${fields.hasNextPage}?@{/search/mine(pageIndex2=${fields.nextPage})}:'#'" aria-label="Next">
+													<a th:href="${fields.hasNextPage}?@{/search/profile(pageIndex2=${fields.nextPage})}:'#'" aria-label="Next">
 														<span aria-hidden="true">&raquo;</span>
 													</a>
 												</li>
 											</ul>
 										</nav>
 									</div>
-									<div class="col-md-4">
-										<table style="font-size: large" class="table table-bordered b1">
-											<thead>
-											<tr>
-												<th>订阅的期刊</th>
-											</tr>
-											</thead>
-											<tbody>
-											<tr th:each="journal:${journals.list}">
-												<td><a th:text="${journal.journal}" th:href="@{/search/advancedsearch_result(keyword3=${journal.journal})}"></a></td>
-											</tr>
-											<tr></tr>
-											<tr></tr>
-											</tbody>
-										</table>
-
-										<!--期刊分页-->
-										<nav aria-label="Page navigation">
-											<ul class="pagination" id="journal">
-												<li th:class="${journals.hasPreviousPage}?'':'disabled'">
-													<a th:href="${journals.hasPreviousPage}?@{/search/mine(pageIndex3=${journals.prePage})}:'#'" aria-label="Previous">
-														<span aria-hidden="true">&laquo;</span>
-													</a>
-												</li>
-
-												<th:block th:each="nav3 : ${journals.navigatepageNums}">
-													<li th:class="${nav3==journals.pageNum}?'active':''">
-														<a th:href="@{/search/mine(pageIndex1=${nav1},pageIndex2=${nav2},pageIndex3=${nav3})}" th:text="${nav3}"></a>
-													</li>
-												</th:block>
-
-												<li th:class="${journals.hasNextPage}?'':'disabled'">
-													<a th:href="${journals.hasNextPage}?@{/search/mine(pageIndex3=${journals.nextPage})}:'#'" aria-label="Next">
-														<span aria-hidden="true">&raquo;</span>
-													</a>
-												</li>
-											</ul>
-										</nav>
-									</div>
+									<div class="col-md-1"></div>
 								</div>
 
 								<!-- 登出模块框 -->
