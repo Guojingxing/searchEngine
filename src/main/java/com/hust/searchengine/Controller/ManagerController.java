@@ -218,7 +218,7 @@ public class ManagerController {
                     model.addAttribute("color", "red");
                 }
             }
-            PageInfo<User> users = managerService.findAllUsers(pageIndex, pageSize);
+            List<User> users = managerService.findAllUsers();
             model.addAttribute("users", users);
             return "manage_user";
         }else
