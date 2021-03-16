@@ -9,6 +9,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.text.PDFTextStripper;
 
 import java.io.*;
 import java.net.Socket;
@@ -213,6 +215,37 @@ public class SearchServiceImpl implements SearchService {
     @Override
     public Integer deleteFeedbackRecord(Integer feedback_id) {
         return searchMapper.deleteFeedbackRecord(feedback_id);
+    }
+
+    @Override
+    public PageInfo<Article> searchByPDF(Integer pageIndex, Integer pageSize, String fileName) {
+        //按照时间排序，最新的文章出现在最前面
+        String orderByDate = "time"+" desc"; //按照数据库的time字段排序，desc代表倒序
+
+        PageHelper.startPage(pageIndex, pageSize, orderByDate);
+
+        File file = new File(fileName);
+        String content = "";
+        try {
+            content = "!" + pdf2String(file);
+        }catch (IOException e){
+            e.printStackTrace();
+            content = "!";
+        }
+
+        List<Article> lists = senate(content);
+        return new PageInfo<>(lists);
+    }
+
+    public static String pdf2String(File file) throws IOException {
+        InputStream inputStream = new BufferedInputStream(new FileInputStream(file));
+        PDDocument pdfDocument = PDDocument.load(inputStream);
+        StringWriter writer = new StringWriter();
+        PDFTextStripper stripper = new PDFTextStripper();
+        stripper.writeText(pdfDocument, writer);
+        String contents = writer.getBuffer().toString();
+//        PDDocumentInformation documentInformation = pdfDocument.getDocumentInformation();
+        return contents;
     }
 
     public List<Article> senate(String data) {

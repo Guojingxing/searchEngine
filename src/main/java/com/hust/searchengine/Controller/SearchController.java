@@ -203,12 +203,12 @@ public class SearchController {
 
                     try {
                         FileUtil.uploadFile(file.getBytes(), filePath, fileName);
+                        PageInfo<Article> advancedList = searchService.searchByPDF(pageIndex,pageSize,fileName);
+                        model.addAttribute("results", advancedList);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
                 }
-                // 2.根据文件名找到相应文件
-                // 然后使用python脚本对文件进行分析操作
             }
 
             return "advancedsearch_result";
