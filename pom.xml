@@ -8,9 +8,11 @@
         <version>2.3.7.RELEASE</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
+
+    <!-- project information -->
     <groupId>com.hust</groupId>
     <artifactId>SearchEngine</artifactId>
-    <version>0.0.2</version>
+    <version>0.1.0</version>
     <name>SearchEngine</name>
     <description>An Intelligent Search Engine Based on Semantic Comprehension</description>
 
