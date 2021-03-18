@@ -190,7 +190,7 @@ public class SearchController {
 
         User user = (User)session.getAttribute("user");
         if(user!=null) {
-            if(file!=null||!file.isEmpty()){// 1.保存文件到硬盘上
+            if(file!=null){// 1.保存文件到硬盘上
                 String fileName = file.getOriginalFilename();
                 String filePath;
                 if(fileName!=null&&!fileName.isEmpty()){
